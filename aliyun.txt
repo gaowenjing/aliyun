@@ -1,21 +1,100 @@
 #!/bin/sh
-#shadowsocks
+#
+yum install -y pptpd squid libreswan openvpn
+#
 curl -LO https://github.com/shadowsocks/shadowsocks/archive/2.9.1.tar.gz
 tar xf 2.9.1.tar.gz
 cd shadowsocks-2.9.1/
 python setup.py install
-ssserver -p 993 -k dadfdadf -a --fast-open -d start &
-#pptp
+ssserver -p 993 -k testing123 -a --fast-open -d start &
+
+#PPTP
 sysctl -w 'net.ipv4.ip_forward=1'
 iptables -t nat -I POSTROUTING -o eth0 -j MASQUERADE
 iptables -t nat -I POSTROUTING -o eth1 -j MASQUERADE
-iptables -t mangle -I FORWARD -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --set-mss 1200
-yum install -y pptpd squid libreswan openvpn
-echo 'james pptpd dadfdadf * ' > /etc/ppp/chap-secrets
+echo 'james pptpd testing123 * ' > /etc/ppp/chap-secrets
 echo 'ms-dns 8.8.8.8' >> /etc/ppp/options.pptpd
-echo 'localip 10.255.255.1' >> /etc/pptpd.conf
-echo 'remoteip 10.255.255.2-10' >> /etc/pptpd.conf
+cat >> /etc/pptpd.conf <<EOF
+localip 10.255.255.1
+remoteip 10.255.255.2-10
+EOF
 systemctl start pptpd
+
+#SSL
+cat > /etc/openvpn/a.conf <<EOF
+dev tun
+proto udp
+lport 1984
+ifconfig 10.255.254.2 10.255.254.1
+
+<secret>
+#
+# 2048 bit OpenVPN static key
+#
+-----BEGIN OpenVPN Static key V1-----
+b044de98085013ea1462a86fc50b5f99
+eb634c9c0f4576073ca5e2a9db40bf92
+85519c5e59e74c6522f20de368ca6a48
+c69aac264e90f6ff3760d2f6129d06a8
+2a264f5c223222d208ee2a8650857aad
+a1093af61bb52de0bd9b931495cb92b3
+cb44624a2ddca119db0f10eccc589803
+d10e29d75a5eb71e92c5d6b0f3037c74
+53c57a1644e8971cec4543548fdc0525
+97b4b2decdb2c5e401213c00fcbba46a
+751888f2d732b39e7b4ba34257a1872a
+8eb7074e1b8e4066a14113c18520e2c6
+32e1382a425a92be1a44f3308dc695f5
+525409ef9bb2359f0446f75980dd8424
+4be9c8e2876854442221a1c55b4ddc7a
+cc20103fbf533366ec71ca161701bd1a
+-----END OpenVPN Static key V1-----
+</secret>
+EOF
+systemctl start openvpn@a
+
+#PSK + XAUTH
+iptables -t mangle -I FORWARD -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --set-mss 1300
+cat > /etc/ipsec.d/a.conf <<EOF
+conn xauth-psk
+    authby=secret
+    pfs=no
+    auto=add
+    rekey=no
+    left=%defaultroute
+    leftsubnet=0.0.0.0/0
+    rightaddresspool=10.231.247.10-10.231.247.254
+    right=%any
+    # make cisco clients happy
+    cisco-unity=yes
+    # address of your internal DNS server
+    modecfgdns1=8.8.8.8
+    leftxauthserver=yes
+    rightxauthclient=yes
+    leftmodecfgserver=yes
+    rightmodecfgclient=yes
+    modecfgpull=yes
+    #configure pam via /etc/pam.d/pluto
+    xauthby=pam
+    # xauthby=alwaysok MUST NOT be used with PSK
+    # Can be played with below
+    #dpddelay=30
+    #dpdtimeout=120
+    #dpdaction=clear
+    # xauthfail=soft
+    ike-frag=yes
+    ikev2=never
+    sha2-truncbug=yes
+EOF
+
+cat > /etc/ipsec.d/a.secrets <<EOF
+: PSK "testing123"
+EOF
+
+systemctl start ipsec
+
+#PROXY
 systemctl start squid
-#client
+
+#INTERACT
 #curl https://dyip.cn/ssip?updatessip
