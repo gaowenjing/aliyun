@@ -53,6 +53,208 @@ cc20103fbf533366ec71ca161701bd1a
 EOF
 systemctl start openvpn@a
 
+cat > /etc/openvpn/b.conf <<EOF
+server 192.168.101.0 255.255.255.0
+topology subnet
+proto tcp
+port 465
+dev tun
+
+keepalive 1 10
+ping-timer-rem
+
+client-cert-not-required
+plugin /usr/lib64/openvpn/plugins/openvpn-plugin-auth-pam.so login
+
+<dh>
+-----BEGIN DH PARAMETERS-----
+MIIBCAKCAQEA1dGoBwm+AokFld77EtlsjhUc9PZUJxqRvhTaB6ck7a7vsMOgjUQM
+UVNxxTvfQlILLvlxT8lnv6NJx12ioYowh68om8lTuW9zhw4MyYPgrCaw9GvKzss5
+CI1JVGvXdCaKfNxgIaKbJUcUBlseVTrXkEyzHbBm3232H3CcA0w8PhNyNQUludfk
+0H7csiQTHVnY5aKYtYV5JAE+yV99wT+0s9azF1QDiGaHwVsy2gaeL2KjIiPLPUfv
+y3bEoBwjiRANVerLI2v/OVg1laTmveyYvLbNAnU4g5Y2utsz3n96pIRayAbcS9zE
+H4WBWaoI2uUtG5xarhsokzMjwNMGox/rywIBAg==
+-----END DH PARAMETERS-----
+</dh>
+<ca>
+-----BEGIN CERTIFICATE-----
+MIIFEjCCA/qgAwIBAgIJAKpz5FyvuZgBMA0GCSqGSIb3DQEBCwUAMIG2MQswCQYD
+VQQGEwJVUzELMAkGA1UECBMCQ0ExFTATBgNVBAcTDFNhbkZyYW5jaXNjbzEVMBMG
+A1UEChMMRm9ydC1GdW5zdG9uMR0wGwYDVQQLExRNeU9yZ2FuaXphdGlvbmFsVW5p
+dDEYMBYGA1UEAxMPRm9ydC1GdW5zdG9uIENBMRAwDgYDVQQpEwdFYXN5UlNBMSEw
+HwYJKoZIhvcNAQkBFhJtZUBteWhvc3QubXlkb21haW4wHhcNMTYxMDA5MTIxMDEz
+WhcNMjYxMDA3MTIxMDEzWjCBtjELMAkGA1UEBhMCVVMxCzAJBgNVBAgTAkNBMRUw
+EwYDVQQHEwxTYW5GcmFuY2lzY28xFTATBgNVBAoTDEZvcnQtRnVuc3RvbjEdMBsG
+A1UECxMUTXlPcmdhbml6YXRpb25hbFVuaXQxGDAWBgNVBAMTD0ZvcnQtRnVuc3Rv
+biBDQTEQMA4GA1UEKRMHRWFzeVJTQTEhMB8GCSqGSIb3DQEJARYSbWVAbXlob3N0
+Lm15ZG9tYWluMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAvqZP18gs
+f1VY1e85dHXGSa+eudR5+AZ0tQQoeenes4TK4Po6fgKovoZBoFflJ1dG/R7rLqDm
+66el2qVbi2Jk5s7wwndXuKjdMP6/Jr/2adA5Rr8+YcopyR4eGv0+Ojc0yRu6+HUa
+svEQ3xJb5beutLIzp2F+jd9/KqKt5+JhqROqYgLZtvMa7zD5shOt9QW8znF6ujBH
+t31ngPQOTKmOcKJngDHX7vE8FXlXeIho0pzFavHAYWARqknmn/fvwCpXexIFQT7Y
+MKu5EGPvQOSd4KJx3mObHITfM7loavawEzbdftmGFCSQnFQklnNw9kc0y7qImzi3
+Xb57cDwNBH9AWQIDAQABo4IBHzCCARswHQYDVR0OBBYEFKYM3zBu52N/m66rrgh4
+fp/jzc9uMIHrBgNVHSMEgeMwgeCAFKYM3zBu52N/m66rrgh4fp/jzc9uoYG8pIG5
+MIG2MQswCQYDVQQGEwJVUzELMAkGA1UECBMCQ0ExFTATBgNVBAcTDFNhbkZyYW5j
+aXNjbzEVMBMGA1UEChMMRm9ydC1GdW5zdG9uMR0wGwYDVQQLExRNeU9yZ2FuaXph
+dGlvbmFsVW5pdDEYMBYGA1UEAxMPRm9ydC1GdW5zdG9uIENBMRAwDgYDVQQpEwdF
+YXN5UlNBMSEwHwYJKoZIhvcNAQkBFhJtZUBteWhvc3QubXlkb21haW6CCQCqc+Rc
+r7mYATAMBgNVHRMEBTADAQH/MA0GCSqGSIb3DQEBCwUAA4IBAQAId7AR0YENF1ZC
+9B7ODltKCtVWAMBCzBo3VamOF/072zO6ow+inA2qbvhSpAfVs4Sf1rezll5da5AR
+bLcPkLvrNjQTHifUSxArf1nFWRbf44IxwcRaIpaPONjqEByxdImwRe9/ywc+jTrA
+IFO8/lQccuiQZvm0tEFHDomirLYviKBqANZUJ4VTgAQ0EgqM0J+8/eeFwQWcQmBp
+9xH3L2W0By7UxLjl5MwPPY64e3td6c9ocDkuC9gsf61xeLPUa842l47LFu8o1P+k
+h05wyxr5LViSREw6zzVnAeCqkHNqOWcCN2FyWeQ73pLigGRb/KJ7yaH+ul8OhuO3
+18hCcqmK
+-----END CERTIFICATE-----
+</ca>
+<key>
+-----BEGIN PRIVATE KEY-----
+MIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQCx/E5ZlcCVry0q
+msTzhyOhUhLKkHSz1JhY/vkP8gRbhlAXqSu9PGKOhcKo15DOzsazvPx9SIA6gecb
+qtrYpoStXMR7+4jKhpxvxtuAB5GWPpdYvs7eD+uz8M4zmWcthq9vwrjRj7q/psFI
+BHYYPHa9rKG9BEH5ehYpCp5j7VF2m2SIt/zXMLsXaMyEuDvBVv8D3YwCWSRMC0Vq
+mu4zZN0AgAgCcfVTLV+orMUC2GRkfrs1/3FLV3AhJtQ3gYvza3u+Yp128KUB1bLG
+zEn4wx0u+ukBFOp0FfwkzslkmKhQ6cggeqsc9Ni21R5ybLEFJ9Kff/b9NFFoE1OG
+rtPH/YRZAgMBAAECggEANeifqo6rGCtI2OCryr8h0ZjUTDpYvqcjxcDkmynInBgg
+Zio9L0H88AIfpZg1Kg6DLKmPKDsva4kxALZNNtWo1gGFGbBkDEOdWlW24h5owEMR
+ADY63hOgZo4HRqWuFKH4vTcTV5XbEHVnkXKYelrF9Ek3a9LAUNnjoGaw9r9Ir018
+G/1/d9ByeQoiNfM7OR7WU50PuB9/ijDFD5G8KPjyogORrXg2N3PmOAerNz1YDNez
+TOKTqOa7mRDtz2hZwZ7uUkyOuCxIbBxzA/CJwa2O+x5sf0g9s9yeOvLkh8s6VGmS
+GCq0jFrTOUx3dm+EW3gLBe8mUcNy17akjaRImeSaaQKBgQDkIZgfyu0CEaNF+TSb
+BmXiIczbGoO7Ok95JF64qndMoL1P3VI3xbfPEqZEIUlo1pTqBfXs3arQDMRa7Jce
+10VO8nGAeFWciELN3kX7SnuUPd5Ddw7Q9zCZA85vNZmWk4Kc06mytmRjr0KoA1cw
+mHihyNc4P21WdmvIGkAuHpoXewKBgQDHun50fXkcilD5gVvW1yIgpKIST+uY3lla
+n8EF6Tn4IPNydqiUKI3DZmmCKLcm9lqv++JoS2PHNfyaqj8KHXSqSq31s6MMFLXN
+0XH8bDSYEui0HcJabzisT34ThsZL222ImS4tulLeKX6Xg+mXSmZRY+BGbct14uhB
+x5NSgFXhOwKBgQC6y38iWShjz0lfnEQkw8JcvMxeg4FlpsM4MD2W+42fouYgJNqT
+bEOrPFwD4TWYsEtSq/rILmEU5b9Jq/u5dw77K60gQmfnOfNpWhz3O++gXGBH4Y6y
+MBUM1X8MtFjEYJhMDUwgVxQwQ2tS4xlbYx0za54+IkFG0MREHqp6mPgXTQKBgQDC
+sBSR4rkKy/0QqTrnmf9nSHO/W+4wrhT1lKHn7CcYqq4D1oyPF1TQsuSH/r5BmYRe
+5S4WMd7KEeLwtKEMcBgH4xHdXkTCAvIQ9WeiAavmzQ/Oeu+3jZD1zer8h7SFvxfv
+PjnYUzZx3orKkMhDND+2eJ/mpyHcANobPLprgjO0fwKBgQCVreA9/evSRjqJ1/d1
+ZiPjZXL61acmwhcerV3/IELR+rLYd2ERcSPhY52KPAtkUHRZD+5+CYNMNAGUqCuP
+MqtSkAgmgjFZ4SYDvGnJyxeWgoI6Tw5cE3mZTZkwT/maAU00/GjX/qeH+mpdSREG
+4+NjDIf5oP/c7YIOcNh8jsRHBg==
+-----END PRIVATE KEY-----
+</key>
+<cert>
+Certificate:
+    Data:
+        Version: 3 (0x2)
+        Serial Number: 1 (0x1)
+    Signature Algorithm: sha256WithRSAEncryption
+        Issuer: C=US, ST=CA, L=SanFrancisco, O=Fort-Funston, OU=MyOrganizationalUnit, CN=Fort-Funston CA/name=EasyRSA/emailAddress=me@myhost.mydomain
+        Validity
+            Not Before: Oct  9 12:18:43 2016 GMT
+            Not After : Oct  7 12:18:43 2026 GMT
+        Subject: C=US, ST=CA, L=SanFrancisco, O=Fort-Funston, OU=MyOrganizationalUnit, CN=hp/name=EasyRSA/emailAddress=me@myhost.mydomain
+        Subject Public Key Info:
+            Public Key Algorithm: rsaEncryption
+                Public-Key: (2048 bit)
+                Modulus:
+                    00:b1:fc:4e:59:95:c0:95:af:2d:2a:9a:c4:f3:87:
+                    23:a1:52:12:ca:90:74:b3:d4:98:58:fe:f9:0f:f2:
+                    04:5b:86:50:17:a9:2b:bd:3c:62:8e:85:c2:a8:d7:
+                    90:ce:ce:c6:b3:bc:fc:7d:48:80:3a:81:e7:1b:aa:
+                    da:d8:a6:84:ad:5c:c4:7b:fb:88:ca:86:9c:6f:c6:
+                    db:80:07:91:96:3e:97:58:be:ce:de:0f:eb:b3:f0:
+                    ce:33:99:67:2d:86:af:6f:c2:b8:d1:8f:ba:bf:a6:
+                    c1:48:04:76:18:3c:76:bd:ac:a1:bd:04:41:f9:7a:
+                    16:29:0a:9e:63:ed:51:76:9b:64:88:b7:fc:d7:30:
+                    bb:17:68:cc:84:b8:3b:c1:56:ff:03:dd:8c:02:59:
+                    24:4c:0b:45:6a:9a:ee:33:64:dd:00:80:08:02:71:
+                    f5:53:2d:5f:a8:ac:c5:02:d8:64:64:7e:bb:35:ff:
+                    71:4b:57:70:21:26:d4:37:81:8b:f3:6b:7b:be:62:
+                    9d:76:f0:a5:01:d5:b2:c6:cc:49:f8:c3:1d:2e:fa:
+                    e9:01:14:ea:74:15:fc:24:ce:c9:64:98:a8:50:e9:
+                    c8:20:7a:ab:1c:f4:d8:b6:d5:1e:72:6c:b1:05:27:
+                    d2:9f:7f:f6:fd:34:51:68:13:53:86:ae:d3:c7:fd:
+                    84:59
+                Exponent: 65537 (0x10001)
+        X509v3 extensions:
+            X509v3 Basic Constraints: 
+                CA:FALSE
+            Netscape Cert Type: 
+                SSL Server
+            Netscape Comment: 
+                Easy-RSA Generated Server Certificate
+            X509v3 Subject Key Identifier: 
+                52:F6:75:B1:CE:D1:E7:D9:0D:F9:CB:DB:43:C3:0D:66:3C:0F:8E:5C
+            X509v3 Authority Key Identifier: 
+                keyid:A6:0C:DF:30:6E:E7:63:7F:9B:AE:AB:AE:08:78:7E:9F:E3:CD:CF:6E
+                DirName:/C=US/ST=CA/L=SanFrancisco/O=Fort-Funston/OU=MyOrganizationalUnit/CN=Fort-Funston CA/name=EasyRSA/emailAddress=me@myhost.mydomain
+                serial:AA:73:E4:5C:AF:B9:98:01
+
+            X509v3 Extended Key Usage: 
+                TLS Web Server Authentication
+            X509v3 Key Usage: 
+                Digital Signature, Key Encipherment
+    Signature Algorithm: sha256WithRSAEncryption
+         94:67:d1:d7:33:f8:4c:7e:43:98:4e:ef:ca:28:08:99:fa:37:
+         57:75:49:f8:44:ec:8c:04:cd:40:89:37:fc:d4:78:06:ce:80:
+         db:fa:e4:b2:82:10:44:26:7d:39:28:1f:0c:eb:c3:b3:f2:55:
+         74:e1:19:30:f5:36:08:2b:8d:d2:a9:85:d9:ea:67:61:1c:9b:
+         d6:90:6e:b8:ab:16:2c:ce:63:c5:32:c6:73:d6:dd:8d:86:7b:
+         2b:d0:19:a6:10:91:71:91:ad:df:22:71:6d:44:c3:f2:0f:4d:
+         fe:f6:5d:92:5c:1a:67:0e:16:3b:3d:3e:88:04:33:60:4e:9c:
+         30:6d:e7:9c:b6:d3:37:33:7b:d1:6a:fe:7e:61:8b:eb:25:93:
+         f3:69:8e:1b:e3:45:44:95:40:0a:e3:39:b7:c8:23:b5:b9:e3:
+         6f:6c:5c:0f:5e:5e:4e:da:00:fa:08:ce:33:8c:af:54:8a:58:
+         66:fb:11:3b:66:45:57:d0:72:36:54:90:3d:79:c1:fc:b0:bc:
+         85:a5:82:20:1e:20:d2:e5:83:e1:27:46:10:79:22:c8:c4:df:
+         8b:f2:24:3d:8f:da:25:91:bb:a0:da:f8:c9:0c:c3:12:fc:bb:
+         38:6b:b1:48:4b:84:0f:eb:98:79:d9:2d:e5:f9:d6:df:cd:a1:
+         a8:12:e1:75
+-----BEGIN CERTIFICATE-----
+MIIFZTCCBE2gAwIBAgIBATANBgkqhkiG9w0BAQsFADCBtjELMAkGA1UEBhMCVVMx
+CzAJBgNVBAgTAkNBMRUwEwYDVQQHEwxTYW5GcmFuY2lzY28xFTATBgNVBAoTDEZv
+cnQtRnVuc3RvbjEdMBsGA1UECxMUTXlPcmdhbml6YXRpb25hbFVuaXQxGDAWBgNV
+BAMTD0ZvcnQtRnVuc3RvbiBDQTEQMA4GA1UEKRMHRWFzeVJTQTEhMB8GCSqGSIb3
+DQEJARYSbWVAbXlob3N0Lm15ZG9tYWluMB4XDTE2MTAwOTEyMTg0M1oXDTI2MTAw
+NzEyMTg0M1owgakxCzAJBgNVBAYTAlVTMQswCQYDVQQIEwJDQTEVMBMGA1UEBxMM
+U2FuRnJhbmNpc2NvMRUwEwYDVQQKEwxGb3J0LUZ1bnN0b24xHTAbBgNVBAsTFE15
+T3JnYW5pemF0aW9uYWxVbml0MQswCQYDVQQDEwJocDEQMA4GA1UEKRMHRWFzeVJT
+QTEhMB8GCSqGSIb3DQEJARYSbWVAbXlob3N0Lm15ZG9tYWluMIIBIjANBgkqhkiG
+9w0BAQEFAAOCAQ8AMIIBCgKCAQEAsfxOWZXAla8tKprE84cjoVISypB0s9SYWP75
+D/IEW4ZQF6krvTxijoXCqNeQzs7Gs7z8fUiAOoHnG6ra2KaErVzEe/uIyoacb8bb
+gAeRlj6XWL7O3g/rs/DOM5lnLYavb8K40Y+6v6bBSAR2GDx2vayhvQRB+XoWKQqe
+Y+1RdptkiLf81zC7F2jMhLg7wVb/A92MAlkkTAtFapruM2TdAIAIAnH1Uy1fqKzF
+AthkZH67Nf9xS1dwISbUN4GL82t7vmKddvClAdWyxsxJ+MMdLvrpARTqdBX8JM7J
+ZJioUOnIIHqrHPTYttUecmyxBSfSn3/2/TRRaBNThq7Tx/2EWQIDAQABo4IBhzCC
+AYMwCQYDVR0TBAIwADARBglghkgBhvhCAQEEBAMCBkAwNAYJYIZIAYb4QgENBCcW
+JUVhc3ktUlNBIEdlbmVyYXRlZCBTZXJ2ZXIgQ2VydGlmaWNhdGUwHQYDVR0OBBYE
+FFL2dbHO0efZDfnL20PDDWY8D45cMIHrBgNVHSMEgeMwgeCAFKYM3zBu52N/m66r
+rgh4fp/jzc9uoYG8pIG5MIG2MQswCQYDVQQGEwJVUzELMAkGA1UECBMCQ0ExFTAT
+BgNVBAcTDFNhbkZyYW5jaXNjbzEVMBMGA1UEChMMRm9ydC1GdW5zdG9uMR0wGwYD
+VQQLExRNeU9yZ2FuaXphdGlvbmFsVW5pdDEYMBYGA1UEAxMPRm9ydC1GdW5zdG9u
+IENBMRAwDgYDVQQpEwdFYXN5UlNBMSEwHwYJKoZIhvcNAQkBFhJtZUBteWhvc3Qu
+bXlkb21haW6CCQCqc+Rcr7mYATATBgNVHSUEDDAKBggrBgEFBQcDATALBgNVHQ8E
+BAMCBaAwDQYJKoZIhvcNAQELBQADggEBAJRn0dcz+Ex+Q5hO78ooCJn6N1d1SfhE
+7IwEzUCJN/zUeAbOgNv65LKCEEQmfTkoHwzrw7PyVXThGTD1NggrjdKphdnqZ2Ec
+m9aQbrirFizOY8UyxnPW3Y2GeyvQGaYQkXGRrd8icW1Ew/IPTf72XZJcGmcOFjs9
+PogEM2BOnDBt55y20zcze9Fq/n5hi+slk/NpjhvjRUSVQArjObfII7W5429sXA9e
+Xk7aAPoIzjOMr1SKWGb7ETtmRVfQcjZUkD15wfywvIWlgiAeINLlg+EnRhB5IsjE
+34vyJD2P2iWRu6Da+MkMwxL8uzhrsUhLhA/rmHnZLeX51t/NoagS4XU=
+-----END CERTIFICATE-----
+</cert>
+
+cipher AES-128-CBC
+
+;comp-lzo
+;push "comp-lzo"
+persist-tun
+persist-key
+push "persist-tun"
+push "persist-key"
+socket-flags TCP_NODELAY
+push "socket-flags TCP_NODELAY"
+
+username-as-common-name
+verb 3
+EOF
+systemctl start openvpn@b
+
 #PSK + XAUTH
 iptables -t mangle -I FORWARD -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --set-mss 1300
 cat > /etc/ipsec.d/a.conf <<EOF
