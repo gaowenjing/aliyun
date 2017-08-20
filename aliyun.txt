@@ -12,7 +12,7 @@ ssserver -p 993 -k testing123 -a --fast-open -d start &
 sysctl -w 'net.ipv4.ip_forward=1'
 iptables -t nat -I POSTROUTING -o eth0 -j MASQUERADE
 iptables -t nat -I POSTROUTING -o eth1 -j MASQUERADE
-echo 'james pptpd testing123 * ' > /etc/ppp/chap-secrets
+echo 'test pptpd testing123 * ' >> /etc/ppp/chap-secrets
 echo 'ms-dns 8.8.8.8' >> /etc/ppp/options.pptpd
 cat >> /etc/pptpd.conf <<EOF
 localip 10.255.255.1
@@ -56,8 +56,8 @@ systemctl start openvpn@a
 cat > /etc/openvpn/b.conf <<EOF
 server 192.168.101.0 255.255.255.0
 topology subnet
-proto tcp
-port 465
+proto udp
+port 2017
 dev tun
 
 keepalive 1 10
@@ -299,4 +299,3 @@ systemctl start ipsec
 systemctl start squid
 
 #INTERACT
-#curl https://dyip.cn/ssip?updatessip
