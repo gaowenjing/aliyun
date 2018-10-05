@@ -1,6 +1,6 @@
 #!/usr/bin/python
 from datetime import datetime, timedelta
-import json, sys, base64
+import json, sys, base64, os
 
 import accessid
 #Access Key ID
@@ -12,7 +12,7 @@ userdata = '''#include
 #https://raw.githubusercontent.com/gaowenjing/aliyun/master/aliyun.txt
 https://code.aliyun.com/jmgwj/aliyun/raw/master/aliyun.txt'''
 
-maxbandwidth = '1'
+maxbandwidth = '2'
 chargetype = 'PayByBandwidth'
 #chargetype = 'PayByTraffic'
 
@@ -51,7 +51,8 @@ if __name__ == '__main__':
   if sys.argv[1] == 'add':
     req = r('CreateInstanceRequest')
     req.set_ImageId('centos_7_3_64_40G_base_20170322.vhd')
-    req.set_InstanceType('ecs.n1.tiny')
+    req.set_InstanceType('ecs.t5-lc2m1.nano')
+#    req.set_InstanceType('ecs.n1.tiny')
     req.set_InternetChargeType(chargetype)
     req.set_InternetMaxBandwidthOut(maxbandwidth)
     req.set_UserData(base64.encodestring(userdata))
@@ -76,15 +77,28 @@ if __name__ == '__main__':
     req = r('ModifyInstanceAutoReleaseTimeRequest')
     req.set_InstanceId(inst_id)
     req.set_AutoReleaseTime(releasetime(sys.argv[2]))
+    print(releasetime(sys.argv[2]))
 
   elif sys.argv[1] == 'passwd':
     req = r('ModifyInstanceAttributeRequest')
     req.set_InstanceId(inst_id)
     req.set_Password('dadfdadf1F')
 
+  elif sys.argv[1] == 'key':
+    req = r('AttachKeyPairRequest')
+    inst_ids = []
+    inst_ids.append(str(inst_id))
+    req.set_InstanceIds(inst_ids)
+    req.set_KeyPairName('hp')
+
+  elif sys.argv[1] == 'ssh':
+    ip_file = file('inst.ip', 'r')
+#    print('ssh ' + json.loads(ip_file.read())['IpAddress'])
+    os.system('ssh ' + json.loads(ip_file.read())['IpAddress'])
+    exit(2)
+
   elif sys.argv[1] == 'show':
     req = r('DescribeInstancesRequest')
-#    req.get_InstanceIds()
 
   elif sys.argv[1] == 'status':
     req = r('DescribeInstanceStatusRequest')
@@ -114,3 +128,7 @@ if __name__ == '__main__':
   if sys.argv[1] == 'addip':
     result_file = file('inst.ip', 'w')
     result_file.write(result)
+    os.system('sed -i "s/remote [0-9.]\+$/remote "' + json.loads(result)['IpAddress'] + '/ /etc/openvpn/ali.conf')
+
+  log_file = file('aliyun.log', 'a')
+  log_file.write(str(datetime.now()) + ' ' + result + '\n')
