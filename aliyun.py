@@ -9,8 +9,8 @@ akid = accessid.akid
 aks = accessid.aks
 
 userdata = '''#include
-#https://raw.githubusercontent.com/gaowenjing/aliyun/master/aliyun.txt
-https://code.aliyun.com/jmgwj/aliyun/raw/master/aliyun.txt'''
+https://raw.githubusercontent.com/gaowenjing/aliyun/master/aliyun.txt
+#https://code.aliyun.com/jmgwj/aliyun/raw/master/aliyun.txt'''
 
 maxbandwidth = '2'
 chargetype = 'PayByBandwidth'
