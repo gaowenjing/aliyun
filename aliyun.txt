@@ -88,4 +88,8 @@ EOF
 systemctl start ipsec
 
 #SQUID
+cat >> /etc/squid/squid.conf <<EOF
+forwarded_for delete
+via off
+EOF
 systemctl start squid

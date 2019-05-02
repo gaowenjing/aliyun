@@ -36,12 +36,12 @@ if __name__ == '__main__':
   try:
     sys.argv[1]
   except:
-    print 'no command.'
+    print('no command.')
     exit(1)
 
   if sys.argv[1] == 'showip':
     with open('inst.ip', 'r') as fd:
-      print json.loads(fd.read())['IpAddress']
+      print(json.loads(fd.read())['IpAddress'])
     exit(0)
 
   from aliyunsdkcore import client
@@ -118,7 +118,7 @@ if __name__ == '__main__':
   # process request
   req.set_accept_format('json')
   result = clt.do_action_with_exception(req)
-  print result
+  print(result)
 
   # log instance id
   if sys.argv[1] == 'add':
@@ -129,6 +129,7 @@ if __name__ == '__main__':
     result_file = file('inst.ip', 'w')
     result_file.write(result)
     os.system('sed -i "s/remote [0-9.]\+$/remote "' + json.loads(result)['IpAddress'] + '/ /etc/openvpn/ali.conf')
+    os.system('systemctl restart openvpn@ali')
 
   log_file = file('aliyun.log', 'a')
   log_file.write(str(datetime.now()) + ' ' + result + '\n')
