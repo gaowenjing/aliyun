@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-yum install -y pptpd squid libreswan openvpn
+yum install -y squid libreswan openvpn #pptpd
 #
 sysctl -w 'net.ipv4.ip_forward=1'
 iptables -t nat -I POSTROUTING -o eth0 -j MASQUERADE
@@ -8,13 +8,13 @@ iptables -t nat -I POSTROUTING -o eth1 -j MASQUERADE
 iptables -t mangle -I FORWARD -s 10.231.247.0/24 -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --set-mss 1300
 
 #PPTP
-echo 'test pptpd testing123 *' >> /etc/ppp/chap-secrets
-echo 'ms-dns 8.8.8.8' >> /etc/ppp/options.pptpd
-cat >> /etc/pptpd.conf <<EOF
-localip 10.255.255.1
-remoteip 10.255.255.2-10
-EOF
-systemctl start pptpd
+#echo 'test pptpd testing123 *' >> /etc/ppp/chap-secrets
+#echo 'ms-dns 8.8.8.8' >> /etc/ppp/options.pptpd
+#cat >> /etc/pptpd.conf <<EOF
+#localip 10.255.255.1
+#remoteip 10.255.255.2-10
+#EOF
+#systemctl start pptpd
 
 #SSL
 cat > /etc/openvpn/a.conf <<EOF
@@ -93,3 +93,8 @@ forwarded_for delete
 via off
 EOF
 systemctl start squid
+
+#CUSTOM
+curl 'https://raw.githubusercontent.com/gaowenjing/aliyun/master/custom.txt' | sh
+
+exit 0
